@@ -1,0 +1,90 @@
+<scene version='3.0.0'>
+    <default name="spp" value="1"/>
+    <default name="res" value="1024"/>
+
+    <integrator type='direct'/>
+
+    <sensor type="perspective" id="sensor">
+        <transform name="to_world">
+            <lookat target="0.0, 0.0, 1.25"
+                    origin="100.0, 100.0, 75.0"
+                    up    ="0.0, 0.0, 1.0"/>
+        </transform>
+        <sampler type="independent">
+            <integer name="sample_count" value="$spp"/>
+        </sampler>
+        <film type="hdrfilm">
+            <rfilter type="box"/>
+            <integer name="width"  value="$res"/>
+            <integer name="height" value="$res"/>
+        </film>
+    </sensor>
+
+    <emitter type="directional">
+        <vector name="direction" value="-1.0, -1.0, -1.0"/>
+        <rgb name="irradiance" value="2.0"/>
+    </emitter>
+    <emitter type="directional">
+        <vector name="direction" value="1.0, -1.0, -1.0"/>
+        <rgb name="irradiance" value="1.0"/>
+    </emitter>
+
+    	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/cable_work_pattern_0.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/cable_work_pattern_1.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/cable_work_pattern_2.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/cable_work_pattern_3.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/cable_work_pattern_4.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/cable_work_pattern_5.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/cable_work_pattern_6.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/cable_work_pattern_7.txt"/>
+	</shape>
+
+    
+</scene>

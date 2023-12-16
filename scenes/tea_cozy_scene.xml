@@ -1,0 +1,188 @@
+<scene version='3.0.0'>
+    <default name="spp" value="1"/>
+    <default name="res" value="1024"/>
+
+    <integrator type='direct'/>
+
+    <sensor type="perspective" id="sensor">
+        <transform name="to_world">
+            <lookat target="0.0, 0.0, 1.25"
+                    origin="100.0, 100.0, 75.0"
+                    up    ="0.0, 1.0, 0.0"/>
+        </transform>
+        <sampler type="independent">
+            <integer name="sample_count" value="$spp"/>
+        </sampler>
+        <film type="hdrfilm">
+            <rfilter type="box"/>
+            <integer name="width"  value="$res"/>
+            <integer name="height" value="$res"/>
+        </film>
+    </sensor>
+
+    <emitter type="directional">
+        <vector name="direction" value="-1.0, -1.0, -1.0"/>
+        <rgb name="irradiance" value="2.0"/>
+    </emitter>
+    <emitter type="directional">
+        <vector name="direction" value="1.0, -1.0, -1.0"/>
+        <rgb name="irradiance" value="1.0"/>
+    </emitter>
+
+    	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/tea_cozy_0.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/tea_cozy_1.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/tea_cozy_2.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/tea_cozy_3.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/tea_cozy_4.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/tea_cozy_5.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/tea_cozy_6.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/tea_cozy_7.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/tea_cozy_8.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/tea_cozy_9.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/tea_cozy_10.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/tea_cozy_11.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/tea_cozy_12.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/tea_cozy_13.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/tea_cozy_14.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/tea_cozy_15.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/tea_cozy_16.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/tea_cozy_17.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/tea_cozy_18.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/tea_cozy_19.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/tea_cozy_20.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/tea_cozy_21.txt"/>
+	</shape>
+
+    
+</scene>

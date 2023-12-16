@@ -1,0 +1,1056 @@
+<scene version='3.0.0'>
+    <default name="spp" value="1"/>
+    <default name="res" value="1024"/>
+
+    <integrator type='direct'/>
+
+    <sensor type="perspective" id="sensor">
+        <transform name="to_world">
+            <lookat target="0.0, 0.0, 1.25"
+                    origin="100.0, 100.0, 75.0"
+                    up    ="0.0, 1.0, 0.0"/>
+        </transform>
+        <sampler type="independent">
+            <integer name="sample_count" value="$spp"/>
+        </sampler>
+        <film type="hdrfilm">
+            <rfilter type="box"/>
+            <integer name="width"  value="$res"/>
+            <integer name="height" value="$res"/>
+        </film>
+    </sensor>
+
+    <emitter type="directional">
+        <vector name="direction" value="-1.0, -1.0, -1.0"/>
+        <rgb name="irradiance" value="2.0"/>
+    </emitter>
+    <emitter type="directional">
+        <vector name="direction" value="1.0, -1.0, -1.0"/>
+        <rgb name="irradiance" value="1.0"/>
+    </emitter>
+
+    	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_0.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_1.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_2.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_3.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_4.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_5.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_6.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_7.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_8.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_9.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_10.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_11.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_12.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_13.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_14.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_15.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_16.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_17.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_18.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_19.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_20.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_21.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_22.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_23.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_24.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_25.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_26.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_27.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_28.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_29.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_30.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_31.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_32.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_33.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_34.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_35.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_36.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_37.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_38.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_39.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_40.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_41.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_42.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_43.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_44.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_45.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_46.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_47.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_48.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_49.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_50.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_51.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_52.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_53.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_54.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_55.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_56.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_57.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_58.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_59.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_60.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_61.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_62.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_63.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_64.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_65.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_66.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_67.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_68.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_69.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_70.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_71.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_72.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_73.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_74.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_75.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_76.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_77.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_78.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_79.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_80.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_81.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_82.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_83.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_84.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_85.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_86.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_87.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_88.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_89.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_90.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_91.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_92.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_93.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_94.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_95.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_96.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_97.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_98.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_99.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_100.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_101.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_102.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_103.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_104.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_105.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_106.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_107.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_108.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_109.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_110.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_111.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_112.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_113.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_114.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_115.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_116.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_117.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_118.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_119.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_120.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_121.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_122.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_123.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_124.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_125.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_126.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_127.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_128.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_129.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_130.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_131.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_132.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_133.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_134.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_135.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_136.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_137.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_138.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_139.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_140.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_141.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_142.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_143.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_144.txt"/>
+	</shape>
+	<shape type="linearcurve">
+		<transform name="to_world">
+			<translate x="1" y="0" z="0"/>
+			<scale value="2"/>
+		</transform>
+		<string name="filename" value="linear_curves/alien_sweater_cables_145.txt"/>
+	</shape>
+
+    
+</scene>
