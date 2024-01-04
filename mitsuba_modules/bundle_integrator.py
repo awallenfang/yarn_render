@@ -3,9 +3,9 @@ import drjit as dr
 
 # Use flags analoguous to roughplastic with direct transmission and reflection/glossy
 
-class BundleIntegrator(mi.MonteCarloIntegrator):
+class BundleIntegrator(mi.SamplingIntegrator):
     def __init__(self, props=mi.Properties()):
-        mi.BSDF.__init__(self, props)
+        super().__init__(props)
 
         self.m_max_depth = props.get("max_depth", 100)
 
@@ -19,24 +19,28 @@ class BundleIntegrator(mi.MonteCarloIntegrator):
         self.m_frac_bsdf = self.m_bsdf_samples / sum
         self.m_frac_lum = self.m_emitter_samples / sum
 
-    def sample(self, scene: mi.Scene, sampler: mi.Sampler, ray: mi.RayDifferential3f, medium: mi.Medium, aovs: mi.Float, active: mi.Mask):
+    def sample(self, scene: mi.Scene, sampler: mi.Sampler, ray: mi.RayDifferential3f, medium: mi.Medium, active: mi.Mask):
         
         ray = mi.Ray3f(ray)
         throughput: mi.Spectrum = mi.Spectrum(1.)
         result: mi.Spectrum = mi.Spectrum(0.)
-        eta: mi.Float = 1.
+        eta: mi.Float = mi.Float(1.)
         depth: mi.UInt32 = mi.UInt32(0)
         
-        valid_ray: mi.Mask = dr.new(scene.environment(), None)
+        valid_ray: mi.Bool = mi.Bool(dr.neq(scene.environment(), None))
 
         prev_si: mi.Interaction3f = dr.zeros(mi.Interaction3f)
-        prev_bsdf_pdf: mi.Float = 1.
-        prev_bsdf_delta: mi.Bool = True
+        prev_bsdf_pdf: mi.Float = mi.Float(1.)
+        prev_bsdf_delta: mi.Bool = mi.Mask(True)
         bsdf_ctx: mi.BSDFContext = mi.BSDFContext()
+        si = dr.zeros(mi.Interaction3f)
+        ds = dr.zeros(mi.DirectionSample3f)
+        em_pdf: mi.Float = mi.Float(0.)
+        mis_bsdf: mi.Float = mi.Float(0.)
+        active_next: mi.Bool = mi.Bool(True)
 
-        loop = mi.Loop("Bundle Path Tracer", sampler, ray, throughput, result,
-                            eta, depth, valid_ray, prev_si, prev_bsdf_pdf,
-                            prev_bsdf_delta, active)
+        loop = mi.Loop("Bundle Path Tracer", lambda: (sampler, ray, throughput, result, si, ds, em_pdf, mis_bsdf,                           eta, depth, valid_ray, prev_si, prev_bsdf_pdf,
+                            prev_bsdf_delta, active, active_next))
         
         loop.set_max_iterations(self.m_max_depth)
 
@@ -44,9 +48,9 @@ class BundleIntegrator(mi.MonteCarloIntegrator):
             si: mi.SurfaceInteraction3f = scene.ray_intersect(ray, dr.eq(depth, 0))
 
 
-            # Sample emitters directly?
-            if dr.any(dr.neq(si.emitter(scene), None)):
-                ds: mi.DirectionalSample3f = mi.DirectionSample3f(scene, si, prev_si)
+            # Sample emitters directly
+            if (dr.any(dr.neq(si.emitter(scene), None))) or True:
+                ds: mi.DirectionSample3f = mi.DirectionSample3f(scene, si, prev_si)
                 em_pdf: mi.Float = 0.
 
                 if dr.any(not prev_bsdf_delta):
@@ -120,7 +124,7 @@ class BundleIntegrator(mi.MonteCarloIntegrator):
 
             prev_si = si
             prev_bsdf_pdf = bsdf_sample.pdf
-            prev_bsdf_delta = mi.has_flag(bsdf_sample.sampled_type, mi.BSDFFlags::Delta)
+            prev_bsdf_delta = mi.has_flag(bsdf_sample.sampled_type, mi.BSDFFlags.Delta)
 
             #### Stopping Criterion #####
             depth[si.is_valid()] += 1
@@ -135,8 +139,8 @@ class BundleIntegrator(mi.MonteCarloIntegrator):
 
             active = active_next and (not rr_active or rr_continue) and dr.neq(throughput_max, 0.)
 
-            # Result, mask if ray exited scenes, aovs
-            return (result, True, aovs)
+            # Result, mask if ray exited scenes
+            return (result, True)
 
 
     def mis_weight(pdf_a: mi.Float, pdf_b: mi.Float) -> mi.Float:
@@ -145,5 +149,6 @@ class BundleIntegrator(mi.MonteCarloIntegrator):
         w = pdf_a / (pdf_a + pdf_b)
         return dr.select(dr.isfinite(w), w, 0.)
     
-    def spec_fma(a: mi.Specturm, b: mi.Spectrum, c: mi.Spectrum):
+    def spec_fma(a: mi.Spectrum, b: mi.Spectrum, c: mi.Spectrum):
         return dr.fma(a,b,c)
+    

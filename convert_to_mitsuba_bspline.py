@@ -1,6 +1,8 @@
 import struct
 from os.path import exists
 
+import numpy as np
+
 up_vectors = {
     1: "0.0, 1.0, 0.0",
     2: "0.0, 0.0, 1.0",
@@ -8,7 +10,7 @@ up_vectors = {
 INT_SIZE = 4
 FLOAT_SIZE = 4
 
-file_name = "cable_work_pattern.bcc"
+file_name = "flame_ribbing_pattern.bcc"
 file = open(f'patterns/{file_name}', "rb")
 data = file.read()
 file.close()
@@ -101,6 +103,19 @@ for i in range(curve_amt):
     with open(f'linear_curves/{file_name}_{i}.txt', "+w") as file:
         file.write(out_string)
 
+# Convert the linear points into mitsuba3 cylinders
+cylinders = ""
+# Flatten the curves array
+curves_arr = np.array(curves_arr)
+curves_arr = curves_arr.flatten()
+for i in range(len(curves_arr)-1):
+    p0 = ", ".join(curves_arr[i].split(" ")[0:3])
+    p1 = " ".join(curves_arr[i+1].split(" ")[0:3])
+
+    cylinders += f'\t<shape type="cylinder">\n\t\t<float name="radius" value="0.1"/>\n\t\t<vector name="p0" value="{p0}"/>\n\t\t<vector name="p1" value="{p1}"/>\n\t\t<bsdf type="twosided"><bsdf type="diffuse"><rgb name="reflectance" value="0.2, 0.25, 0.7"/></bsdf></bsdf>\n\t</shape>\n'
+
+        
+
 # Write the mitsuba data to the curve_preset.xml file to generate the input
 
 output = ""
@@ -108,9 +123,20 @@ output = ""
 for i in range(curve_amt):
     output += f'\t<shape type="linearcurve">\n\t\t<transform name="to_world">\n\t\t\t<translate x="1" y="0" z="0"/>\n\t\t\t<scale value="2"/>\n\t\t</transform>\n\t\t<string name="filename" value="linear_curves/{file_name}_{i}.txt"/>\n\t</shape>\n'
 
-with open("curve_preset.xml", "r") as file:
-    data = file.read()
-    data = data.replace("<!-- CURVES HERE -->", output)
-    data = data.replace("<!-- UP VECTOR -->", up_vectors[up_vector])
-    with open(f'scenes/{file_name}_scene.xml', "+w") as file:
-        file.write(data)        
+
+
+
+
+with open(f'scenes/{file_name}_scene.xml', "+w") as scene_file:
+    with open("curve_preset.xml", "r") as file:
+        data = file.read()
+        data = data.replace("<!-- UP VECTOR -->", up_vectors[up_vector])
+        data = data.replace("<!-- CURVES HERE -->", output)
+        scene_file.write(data)        
+
+with open(f'intersect_scenes/{file_name}_intersect_scene.xml', "+w") as inter_file:
+    with open("curve_preset.xml", "r") as file:
+        data = file.read()
+        data = data.replace("<!-- UP VECTOR -->", up_vectors[up_vector])
+        data = data.replace("<!-- CURVES HERE -->", cylinders)
+        inter_file.write(data)
