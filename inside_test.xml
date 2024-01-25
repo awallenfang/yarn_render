@@ -34,7 +34,7 @@
         <rgb name="intensity" value="1.0"/>
     </emitter>
 
-    <!-- <shape type="cylinder">
+    <shape type="cylinder">
 		<point name="p0" value="0.0, 0.0, -10.0"/>
 		<point name="p1" value="0.0, 0.0, 10.0"/>
         <float name="radius" value="5"/>
@@ -47,8 +47,8 @@
             </bsdf>
         </bsdf>
         
-	</shape> -->
-    <shape type="linearcurve">
+	</shape>
+    <!-- <shape type="linearcurve">
 		<string name="filename" value="inside_test_curve.txt"/>
         <bsdf type="twosided">
            <bsdf type="roughconductor">
@@ -59,7 +59,7 @@
             </bsdf>
         </bsdf>
         
-	</shape>
+	</shape> -->
 
     <!-- <shape type="sdfgrid">
         <string name="filename" value="torus.vol"/>

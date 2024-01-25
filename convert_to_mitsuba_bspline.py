@@ -10,6 +10,10 @@ up_vectors = {
 INT_SIZE = 4
 FLOAT_SIZE = 4
 
+PLY_AMT = 3
+WINDING_SPACING = 0.1
+THREAD_RADIUS = 0.2
+
 file_name = "flame_ribbing_pattern.bcc"
 file = open(f'patterns/{file_name}', "rb")
 data = file.read()
@@ -61,10 +65,17 @@ data_idx = 0
 points_left = 0
 curves_arr = []
 
+curve_data = []
+interp_curve_data = []
+
+curve_plies = [[[] for _ in range(PLY_AMT)] for _ in range(total_curves)]
+
 while data_idx < len(data_bytes):
     # If there is a new curve add a new list to the curves array
     if points_left == 0:
         curves_arr.append([])
+        curve_data.append([])
+        interp_curve_data.append([])
         points_left = abs(int.from_bytes(data_bytes[data_idx:data_idx+INT_SIZE], byteorder='little', signed=True))
         # print(f'Points in curve: {points_left}')
         data_idx += INT_SIZE
@@ -80,20 +91,38 @@ while data_idx < len(data_bytes):
     z = struct.unpack('f', z_bytes)[0]
 
     curves_arr[-1].append(f'{x} {y} {z} 0.2\n')
+    curve_data[-1].append((x,y,z))
+
+    # If there are at least two points in the current curve_data
+    if len(curve_data[-1]) > 1:
+        # Get the two points and interpolate them in equal stepsizes
+        # Then write the new point to interp_curve_data
+        p1 = curve_data[-1][-2]
+        p2 = curve_data[-1][-1]
+        distance = np.sqrt((p2[0] - p1[0])**2 + (p2[1] - p1[1])**2 + (p2[2] - p1[2])**2)
+        spacing = WINDING_SPACING
+        steps = int(distance / spacing)
+        if steps == 0:
+            steps = 1
+        for i in range(steps):
+            interp_curve_data[-1].append((p1[0] + (p2[0] - p1[0]) * i / steps, p1[1] + (p2[1] - p1[1]) * i / steps, p1[2] + (p2[2] - p1[2]) * i / steps))
 
     data_idx += FLOAT_SIZE*3
     points_left -= 1
 
-# for cp_index in range(0,curve_control_points):
-#     x_bytes = curve_data_bytes[cp_index*12:cp_index*12+4]
-#     y_bytes = curve_data_bytes[cp_index*12+4:cp_index*12+8]
-#     z_bytes = curve_data_bytes[cp_index*12+8:cp_index*12+12]
-
-#     x = struct.unpack('f', x_bytes)[0]
-#     y = struct.unpack('f', y_bytes)[0]
-#     z = struct.unpack('f', z_bytes)[0]
-
-#     out_arr.append(f'{x} {y} {z} 0.2\n')
+# Iterate through the interp_curve_data and write the points to the curve_plies
+for curve_idx in range(len(interp_curve_data)):
+    for ply_idx in range(PLY_AMT):
+        phase = 2*np.pi/PLY_AMT * ply_idx
+        for point_idx in range(len(interp_curve_data[curve_idx])):
+            # The ply_point is the base point plus the offset
+            # The offset is the winding, rotated by the current direction of the curve
+            direction = np.array(interp_curve_data[curve_idx][point_idx]) - np.array(interp_curve_data[curve_idx][point_idx-1])
+            offset = np.array([np.cos(point_idx * WINDING_SPACING + phase), np.sin(point_idx * WINDING_SPACING + phase), 0]) * THREAD_RADIUS
+            # Rotate offset into the direction
+            
+            ply_point = interp_curve_data[curve_idx][point_idx] 
+            curve_plies[curve_idx][ply_idx].append(interp_curve_data[curve_idx][point_idx])
 
 
 curve_amt = len(curves_arr)

@@ -38,9 +38,10 @@ class BundleIntegrator(mi.SamplingIntegrator):
         em_pdf: mi.Float = mi.Float(0.)
         mis_bsdf: mi.Float = mi.Float(0.)
         active_next: mi.Bool = mi.Bool(True)
+        active_em_sample: mi.Bool = mi.Bool(True)
 
         loop = mi.Loop("Bundle Path Tracer", lambda: (sampler, ray, throughput, result, si, ds, em_pdf, mis_bsdf,                           eta, depth, valid_ray, prev_si, prev_bsdf_pdf,
-                            prev_bsdf_delta, active, active_next))
+                            prev_bsdf_delta, active, active_next, active_em_sample))
         
         loop.set_max_iterations(self.m_max_depth)
 
@@ -49,22 +50,23 @@ class BundleIntegrator(mi.SamplingIntegrator):
 
 
             # Sample emitters directly
-            if (dr.any(dr.neq(si.emitter(scene), None))) or True:
-                ds: mi.DirectionSample3f = mi.DirectionSample3f(scene, si, prev_si)
-                em_pdf: mi.Float = 0.
+            active_em_sample = dr.neq(si.emitter(scene), None)
+            ds: mi.DirectionSample3f = mi.DirectionSample3f(scene, si, prev_si)
+            em_pdf: mi.Float = mi.Float(0.)
 
-                if dr.any(not prev_bsdf_delta):
-                    em_pdf = scene.pdf_emitter_direction(prev_si, ds, not prev_bsdf_delta)
+            em_pdf[~prev_bsdf_delta ] = scene.pdf_emitter_direction(prev_si, ds, ~prev_bsdf_delta)
+            dr.printf_async("em_pdf: %f\n", em_pdf)
+            dr.printf_async("prev: %f\n", prev_bsdf_pdf)
 
-                mis_bsdf: mi.Float = self.mis_weight(prev_bsdf_pdf, em_pdf)
+            mis_bsdf: mi.Float = self.mis_weight(prev_bsdf_pdf, em_pdf)
 
-                result = self.spec_fma(throughput, ds.emitter.eval(si,prev_bsdf_pdf > 0.) * mis_bsdf, result)
+            result[active_em_sample] = dr.fma(throughput, ds.emitter.eval(si,prev_bsdf_pdf > 0.) * mis_bsdf, result)
 
             # Should we even continue tracing?
             active_next: mi.Bool = (depth +1 < self.m_max_depth) and si.is_valid()
 
-            if dr.none(active_next):
-                break
+            # if dr.none(active_next):
+            #     break
 
             bsdf = si.bsdf(ray)
 
@@ -76,17 +78,11 @@ class BundleIntegrator(mi.SamplingIntegrator):
             em_weight: mi.Spectrum = dr.zeros(mi.Spectrum)
             wo: mi.Vector3f = dr.zeros(mi.Vector3f)
 
-            if dr.any(active_em):
-                ds, em_weight = scene.sample_emitter_direction(si, sampler.next_2d(), True, active_em)
+            ds, em_weight = scene.sample_emitter_direction(si, sampler.next_2d(), True, active_em)
 
-                active_em &= dr.neq(ds.pdf, 0.)
+            active_em &= dr.neq(ds.pdf, 0.)
 
-                if dr.grad_enabled(si.p):
-                    ds.d = dr.normalize(ds.p - si.p)
-                    em_val: mi.Spectrum = scene.eval_emitter_direction(si, ds, active_em)
-                    em_weight = dr.select(dr.neq(ds.pdf, 0.), em_val / ds.pdf, 0.)
-                
-                wo = si.to_local(ds.d)
+            wo[active_em] = si.to_local(ds.d)
 
             ###### BSDF * cos(theta)
 
@@ -96,12 +92,11 @@ class BundleIntegrator(mi.SamplingIntegrator):
             bsdf_val, bsdf_pdf, bsdf_sample, bsdf_weight = bsdf.eval_pdf_sample(bsdf_ctx, si, wo, sample_1, sample_2)
 
             #### Emitter sampling contribution ####
-            if dr.any(active_em):
-                bsdf_val = si.to_world_mueller(bsdf_val, -wo, si.wi)
+            bsdf_val = si.to_world_mueller(bsdf_val, -wo, si.wi)
 
-                mis_em = dr.select(ds.delta, 1., self.mis_weight(ds.pdf, bsdf_pdf))
+            mis_em = dr.select(ds.delta, 1., self.mis_weight(ds.pdf, bsdf_pdf))
 
-                result[active_em] = dr.fma(ds.delta, bsdf_val * em_weight * mis_em, result)
+            result[active_em] = dr.fma(ds.delta, bsdf_val * em_weight * mis_em, result)
 
             ###### BSDF Sampling #####
             bsdf_weight = si.to_world_mueller(bsdf_weight, -bsdf_sample.wo, si.wi)
@@ -109,12 +104,6 @@ class BundleIntegrator(mi.SamplingIntegrator):
             # NOTE: Change position of this ray
             ray = si.spawn_ray(si.to_world(bsdf_sample.wo))
 
-            if dr.grad_enabled(ray):
-                ray = dr.detach(ray)
-
-                wo_2: mi.Vector3f = si.to_local(ray.d)
-                bsdf_val_2, bsdf_pdf_2 = bsdf.eval_pdf(bsdf_ctx, si, wo_2, active)
-                bsdf_weight[bsdf_pdf_2 > 0.] = bsdf_val_2 / dr.detach(bsdf_pdf_2)
             
             ##### Update loop vars ######
                 
