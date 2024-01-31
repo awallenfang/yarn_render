@@ -11,7 +11,9 @@ import matplotlib.pyplot as plt
 mi.set_variant('llvm_ad_rgb')
 from mitsuba_modules.bundle_integrator import BundleIntegrator
 
-mi.register_integrator('bundle', lambda props: BundleIntegrator(props))
+# mi.register_integrator('bundle', lambda props: BundleIntegrator(props))
+
+# print("Successfully registered integrator")
 
 # scene = mi.load_file("scenes/tea_cozy_scene.xml")
 # scene = mi.load_dict(mi.cornell_box())

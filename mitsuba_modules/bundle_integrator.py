@@ -12,6 +12,7 @@ class BundleIntegrator(mi.SamplingIntegrator):
         self.m_shading_samples = props.get("shading_samples", 1)
         self.m_emitter_samples = props.get("emitter_samples", self.m_shading_samples) 
         self.m_bsdf_samples = props.get("bsdf_samples", self.m_shading_samples)
+        self.m_rr_depth = props.get("rr_depth", 5)
 
         sum = self.m_emitter_samples + self.m_bsdf_samples
         self.m_weight_bsdf = 1. / self.m_bsdf_samples
@@ -58,12 +59,19 @@ class BundleIntegrator(mi.SamplingIntegrator):
             dr.printf_async("em_pdf: %f\n", em_pdf)
             dr.printf_async("prev: %f\n", prev_bsdf_pdf)
 
-            mis_bsdf: mi.Float = self.mis_weight(prev_bsdf_pdf, em_pdf)
+            # pdf_a *= pdf_a
+            # pdf_b *= pdf_b
+            # w = pdf_a / (pdf_a + pdf_b)
+            # return dr.select(dr.isfinite(w), w, 0.)
+
+
+            mis_bsdf: mi.Float = mis_weight(prev_bsdf_pdf, em_pdf)
 
             result[active_em_sample] = dr.fma(throughput, ds.emitter.eval(si,prev_bsdf_pdf > 0.) * mis_bsdf, result)
 
             # Should we even continue tracing?
-            active_next: mi.Bool = (depth +1 < self.m_max_depth) and si.is_valid()
+            active_next: mi.Mask = (depth + 1 < self.m_max_depth) # and si.is_valid()
+            active_next &= si.is_valid()
 
             # if dr.none(active_next):
             #     break
@@ -72,7 +80,8 @@ class BundleIntegrator(mi.SamplingIntegrator):
 
             ##### Emitter sampling #####
 
-            active_em: mi.Mask = active_next and mi.has_flag(bsdf.flags(), mi.BSDFFlags.Smooth)
+            active_em: mi.Mask = active_next # and mi.has_flag(bsdf.flags(), mi.BSDFFlags.Smooth)
+            active_em &= mi.has_flag(bsdf.flags(), mi.BSDFFlags.Smooth)
 
             ds: mi.DirectionSample3f = dr.zeros(mi.DirectionSample3f)
             em_weight: mi.Spectrum = dr.zeros(mi.Spectrum)
@@ -94,9 +103,10 @@ class BundleIntegrator(mi.SamplingIntegrator):
             #### Emitter sampling contribution ####
             bsdf_val = si.to_world_mueller(bsdf_val, -wo, si.wi)
 
-            mis_em = dr.select(ds.delta, 1., self.mis_weight(ds.pdf, bsdf_pdf))
+            mis_em = dr.select(ds.delta, 1., mis_weight(ds.pdf, bsdf_pdf))
+            # mis_em = dr.select(ds.delta, 1., mi.Float(0.5))
 
-            result[active_em] = dr.fma(ds.delta, bsdf_val * em_weight * mis_em, result)
+            result[active_em] = dr.fma(throughput, bsdf_val * em_weight * mis_em, result)
 
             ###### BSDF Sampling #####
             bsdf_weight = si.to_world_mueller(bsdf_weight, -bsdf_sample.wo, si.wi)
@@ -109,7 +119,11 @@ class BundleIntegrator(mi.SamplingIntegrator):
                 
             throughput *= bsdf_weight
             eta *= bsdf_sample.eta
-            valid_ray |= active and si.is_valid() and not mi.has_flag(bsdf_sample.sampled_type, mi.BSDFFlags.Null)
+            valid_ray_change_mask = active
+            valid_ray_change_mask &= si.is_valid()
+            valid_ray_change_mask &= ~mi.has_flag(bsdf_sample.sampled_type, mi.BSDFFlags.Null)
+            # valid_ray |= active and si.is_valid() and not mi.has_flag(bsdf_sample.sampled_type, mi.BSDFFlags.Null)
+            valid_ray |= valid_ray_change_mask
 
             prev_si = si
             prev_bsdf_pdf = bsdf_sample.pdf
@@ -120,24 +134,32 @@ class BundleIntegrator(mi.SamplingIntegrator):
 
             throughput_max = dr.max(mi.unpolarized_spectrum(throughput))
 
-            rr_prob = dr.min(throughput_max * dr.sqr(eta), 0.95)
+            rr_prob = dr.minimum(throughput_max * dr.sqr(eta), 0.95)
             rr_active = depth >= self.m_rr_depth
             rr_continue = sampler.next_1d() < rr_prob
 
             throughput[rr_active] *= dr.rcp(dr.detach(rr_prob))
 
-            active = active_next and (not rr_active or rr_continue) and dr.neq(throughput_max, 0.)
+            # active = active_next and (not rr_active or rr_continue) and dr.neq(throughput_max, 0.)
+            active = active_next # and (not rr_active or rr_continue) and dr.neq(throughput_max, 0.)
+            active &= dr.neq(throughput_max, 0.)
+
+            temp_mask = dr.neq(rr_active, True)
+            temp_mask |= rr_continue
+
+            active &= temp_mask
 
             # Result, mask if ray exited scenes
-            return (result, True)
+            return dr.select(valid_ray, result, 0.), valid_ray, []
 
 
-    def mis_weight(pdf_a: mi.Float, pdf_b: mi.Float) -> mi.Float:
-        pdf_a *= pdf_a
-        pdf_b *= pdf_b
-        w = pdf_a / (pdf_a + pdf_b)
-        return dr.select(dr.isfinite(w), w, 0.)
+
     
     def spec_fma(a: mi.Spectrum, b: mi.Spectrum, c: mi.Spectrum):
         return dr.fma(a,b,c)
-    
+
+def mis_weight(pdf_a: mi.Float, pdf_b: mi.Float) -> mi.Float:
+    pdf_a *= pdf_a
+    pdf_b *= pdf_b
+    w = pdf_a / (pdf_a + pdf_b)
+    return dr.select(dr.isfinite(w), w, 0.)

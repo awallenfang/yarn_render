@@ -6,9 +6,8 @@ class BundleBSSRDF(mi.BSDF):
         mi.BSDF.__init__(self, props)
 
 
-        # Load model as 3d numpy tables from on orthogonal input direction
-        # Use d'Eon for Theta
-        # Interpolate over n tables for Phi
+        # Load model as 4d numpy tables from on orthogonal input direction
+        # Use nearest neighbour interpolation
         # Save interaction change
 
         # Read 'eta' and 'tint' properties from `props`
