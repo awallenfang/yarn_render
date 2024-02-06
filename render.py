@@ -7,12 +7,13 @@
 import drjit as dr
 import mitsuba as mi
 import matplotlib.pyplot as plt
+from mitsuba_modules.bundle_bsdf import BundleBSDF
 
 mi.set_variant('llvm_ad_rgb')
 from mitsuba_modules.bundle_integrator import BundleIntegrator
 
 # mi.register_integrator('bundle', lambda props: BundleIntegrator(props))
-
+mi.register_bsdf('bundle_bsdf', lambda props: BundleBSDF(props))
 # print("Successfully registered integrator")
 
 # scene = mi.load_file("scenes/tea_cozy_scene.xml")
