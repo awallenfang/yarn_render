@@ -45,14 +45,16 @@ class BundleBSDF(mi.BSDF):
         # TODO: is this correct?
         bs.eta = 1.0
 
-        local_in = si.to_local(si.wi)
-        theta_in = dr.acos(local_in.z)
-        phi_in = dr.acos(local_in.x / dr.sqrt(local_in.x**2 + local_in.y**2))
+        local_in = si.to_local(dr.normalize(si.wi))
+        theta_in = dr.asin(local_in.z)
+        phi_in = dr.atan2(local_in.y, local_in.x)
+        phi_in[phi_in < 0] += 2*dr.pi
 
         # value = dr.select(passthrough, 1. * self.passthrough_chance, si.uv.y / bs.pdf )
         value = dr.select(passthrough, 1. * self.passthrough_chance, self.eval(ctx, si, interacted_dir, active) * dr.cos(dr.dot(si.n, si.wi)))
-        # value = dr.select(passthrough, 1. * self.passthrough_chance, dr.power(theta_in / (dr.pi), 10.))
-        # value = dr.select(passthrough, 1. * self.passthrough_chance, theta_in / dr.pi)
+        # value = dr.select(passthrough, 1. * self.passthrough_chance, phi_in / (2. * dr.pi))
+
+        # value = dr.select(passthrough, 1. * self.passthrough_chance, theta_in / (dr.pi))
 
         return (bs, value)
 
@@ -64,20 +66,25 @@ class BundleBSDF(mi.BSDF):
         wavelengths = si.wavelengths
         outgoing_dir = dr.normalize(wo)
 
-        theta_in = dr.acos(si.to_local(incident_dir).z) #- dr.pi/2
-        phi_in = dr.acos(si.to_local(incident_dir).x / dr.sqrt(si.to_local(incident_dir).x**2 + si.to_local(incident_dir).y**2))
-
-        theta_out = dr.acos(si.to_local(outgoing_dir).z) #- dr.pi/2
-        phi_out = dr.acos(si.to_local(outgoing_dir).x / dr.sqrt(si.to_local(outgoing_dir).x**2 + si.to_local(outgoing_dir).y**2))
+        # theta_in = dr.acos(si.to_local(incident_dir).z) + dr.pi/2
+        theta_in = dr.asin(si.to_local(incident_dir).z) + dr.pi/2
+        # phi_in = dr.atan2(si.to_local(incident_dir).y, si.to_local(incident_dir).x)
+        # phi_in[phi_in < 0] += 2*dr.pi
+        phi_in = si.uv.x * 2*dr.pi
+        # theta_out = dr.acos(si.to_local(outgoing_dir).z) + dr.pi/2
+        theta_out = dr.asin(si.to_local(outgoing_dir).z) + dr.pi/2
+        phi_out = dr.atan2(si.to_local(outgoing_dir).y, si.to_local(outgoing_dir).x)
+        phi_out[phi_out < 0] += 2*dr.pi
         # phi_out = dr.atan2(si.to_local(outgoing_dir).z, si.to_local(outgoing_dir).x)
 
         # Calculate the offset in this case, since the input model is circular
         # Also apply twisting
-        phi_out_offset = (phi_out - phi_in) #+ si.uv.y * 20*dr.pi
+        phi_out_offset = (phi_out - phi_in) #+ si.uv.y * 4*dr.pi
         phi_out_offset[phi_out_offset < 0] += 2*dr.pi
         phi_out_offset[phi_out_offset > 2*dr.pi] -= 2*dr.pi
 
         # TODO: Check how wavelengths are handled 
+        # return mi.Float(0.0001)
         return self.eval_model(theta_in, 0., theta_out, phi_out_offset, mi.Float(600.), active)
         # return self.eval_model(ctx,si,wo,active, 600., active)
         # return mi.Float(0.)
