@@ -141,7 +141,7 @@ for i in range(len(curves_arr)-1):
     p0 = ", ".join(curves_arr[i].split(" ")[0:3])
     p1 = " ".join(curves_arr[i+1].split(" ")[0:3])
 
-    cylinders += f'\t<shape type="cylinder">\n\t\t<float name="radius" value="0.1"/>\n\t\t<vector name="p0" value="{p0}"/>\n\t\t<vector name="p1" value="{p1}"/>\n\t\t<bsdf type="twosided"><bsdf type="diffuse"><rgb name="reflectance" value="0.2, 0.25, 0.7"/></bsdf></bsdf>\n\t</shape>\n'
+    cylinders += f'\t<shape type="cylinder">\n\t\t<float name="radius" value="0.1"/>\n\t\t<vector name="p0" value="{p0}"/>\n\t\t<vector name="p1" value="{p1}"/>\n\t\t<bsdf type="bundle_bsdf"><point name="tint" value="0.2, 0.25, 0.7"/></bsdf>\n\t</shape>\n'
 
         
 
