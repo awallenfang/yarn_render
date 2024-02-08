@@ -45,8 +45,14 @@ class BundleBSDF(mi.BSDF):
         # TODO: is this correct?
         bs.eta = 1.0
 
+        local_in = si.to_local(si.wi)
+        theta_in = dr.acos(local_in.z)
+        phi_in = dr.acos(local_in.x / dr.sqrt(local_in.x**2 + local_in.y**2))
+
         # value = dr.select(passthrough, 1. * self.passthrough_chance, si.uv.y / bs.pdf )
         value = dr.select(passthrough, 1. * self.passthrough_chance, self.eval(ctx, si, interacted_dir, active) * dr.cos(dr.dot(si.n, si.wi)))
+        # value = dr.select(passthrough, 1. * self.passthrough_chance, dr.power(theta_in / (dr.pi), 10.))
+        # value = dr.select(passthrough, 1. * self.passthrough_chance, theta_in / dr.pi)
 
         return (bs, value)
 
@@ -58,11 +64,12 @@ class BundleBSDF(mi.BSDF):
         wavelengths = si.wavelengths
         outgoing_dir = dr.normalize(wo)
 
-        theta_in = dr.acos(si.to_local(incident_dir).y) #- dr.pi/2
-        phi_in = dr.atan2(si.to_local(incident_dir).z, si.to_local(incident_dir).x)
+        theta_in = dr.acos(si.to_local(incident_dir).z) #- dr.pi/2
+        phi_in = dr.acos(si.to_local(incident_dir).x / dr.sqrt(si.to_local(incident_dir).x**2 + si.to_local(incident_dir).y**2))
 
-        theta_out = dr.acos(si.to_local(outgoing_dir).y) #- dr.pi/2
-        phi_out = dr.atan2(si.to_local(outgoing_dir).z, si.to_local(outgoing_dir).x)
+        theta_out = dr.acos(si.to_local(outgoing_dir).z) #- dr.pi/2
+        phi_out = dr.acos(si.to_local(outgoing_dir).x / dr.sqrt(si.to_local(outgoing_dir).x**2 + si.to_local(outgoing_dir).y**2))
+        # phi_out = dr.atan2(si.to_local(outgoing_dir).z, si.to_local(outgoing_dir).x)
 
         # Calculate the offset in this case, since the input model is circular
         # Also apply twisting
