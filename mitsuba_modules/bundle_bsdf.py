@@ -1,7 +1,7 @@
 from typing import Tuple
 import mitsuba as mi
 import drjit as dr
-mi.set_variant("llvm_spectral")
+mi.set_variant("llvm_ad_rgb")
 
 from mitsuba import BSDF, BSDFContext, BSDFSample3f, Color3f, Point2f, SurfaceInteraction3f, Vector3f
 import numpy as np
@@ -11,8 +11,8 @@ class BundleBSDF(mi.BSDF):
     def __init__(self, props):
         mi.BSDF.__init__(self, props)
 
-        # self.model, self.passthrough_chance = load_model("./model")
-        self.model, self.passthrough_chance = load_single_model("./single_model")
+        self.model, self.passthrough_chance = load_model("./model")
+        # self.model, self.passthrough_chance = load_single_model("./single_model")
         self.model_tensor = mi.TensorXf(self.model)
         
         # Read 'eta' and 'tint' properties from `props`
@@ -35,7 +35,7 @@ class BundleBSDF(mi.BSDF):
 
         # Fill up the BSDFSample struct
         bs = mi.BSDFSample3f()
-        bs.pdf = dr.select(passthrough,  self.passthrough_chance, self.pdf(ctx, si, interacted_dir, active),)
+        bs.pdf = dr.select(passthrough,  self.passthrough_chance, self.pdf(ctx, si, interacted_dir, active))
         bs.sampled_component = dr.select(passthrough,  mi.UInt32(1), mi.UInt32(0),)
         bs.sampled_type      = dr.select(passthrough, mi.UInt32(+mi.BSDFFlags.Null) + mi.UInt32(+mi.BSDFFlags.Delta), mi.UInt32(+mi.BSDFFlags.DeltaTransmission) + mi.UInt32(+mi.BSDFFlags.Smooth))
         bs.wo = dr.select(passthrough,
@@ -49,9 +49,10 @@ class BundleBSDF(mi.BSDF):
         theta_in = dr.asin(local_in.z)
         phi_in = dr.atan2(local_in.y, local_in.x)
         phi_in[phi_in < 0] += 2*dr.pi
-
+        # dr.printf_async("theta_in: %s, phi_in: %s\n", theta_in, phi_in, active=active)
         # value = dr.select(passthrough, 1. * self.passthrough_chance, si.uv.y / bs.pdf )
-        value = dr.select(passthrough, 1. * self.passthrough_chance, self.eval(ctx, si, interacted_dir, active) * dr.cos(dr.dot(si.n, si.wi)))
+        # value = dr.select(passthrough, 1. * self.passthrough_chance, self.eval(ctx, si, interacted_dir, active))
+        value = dr.select(passthrough, 1., self.eval(ctx, si, interacted_dir, active) / bs.pdf)
         # value = dr.select(passthrough, 1. * self.passthrough_chance, phi_in / (2. * dr.pi))
 
         # value = dr.select(passthrough, 1. * self.passthrough_chance, theta_in / (dr.pi))
@@ -59,33 +60,37 @@ class BundleBSDF(mi.BSDF):
         return (bs, value)
 
     def eval(self, ctx, si, wo, active):
-        return self.pdf(ctx,si,wo,active)
-
-    def pdf(self, ctx, si, wo, active):
-        incident_dir = dr.normalize(si.wi)
+        incident_dir = dr.normalize(-si.wi)
         wavelengths = si.wavelengths
         outgoing_dir = dr.normalize(wo)
 
         # theta_in = dr.acos(si.to_local(incident_dir).z) + dr.pi/2
         theta_in = dr.asin(si.to_local(incident_dir).z) + dr.pi/2
-        # phi_in = dr.atan2(si.to_local(incident_dir).y, si.to_local(incident_dir).x)
-        # phi_in[phi_in < 0] += 2*dr.pi
-        phi_in = si.uv.x * 2*dr.pi
+        phi_in = dr.atan2(si.to_local(incident_dir).y, si.to_local(incident_dir).x)
+        phi_in[phi_in < 0] += 2*dr.pi
+
+        # phi_in = si.uv.x * 2*dr.pi
         # theta_out = dr.acos(si.to_local(outgoing_dir).z) + dr.pi/2
         theta_out = dr.asin(si.to_local(outgoing_dir).z) + dr.pi/2
         phi_out = dr.atan2(si.to_local(outgoing_dir).y, si.to_local(outgoing_dir).x)
         phi_out[phi_out < 0] += 2*dr.pi
+
         # phi_out = dr.atan2(si.to_local(outgoing_dir).z, si.to_local(outgoing_dir).x)
 
         # Calculate the offset in this case, since the input model is circular
         # Also apply twisting
-        phi_out_offset = (phi_out - phi_in) #+ si.uv.y * 4*dr.pi
+        phi_out_offset = (phi_out - phi_in) + dr.pi #+ si.uv.y * 20*dr.pi
         phi_out_offset[phi_out_offset < 0] += 2*dr.pi
         phi_out_offset[phi_out_offset > 2*dr.pi] -= 2*dr.pi
 
         # TODO: Check how wavelengths are handled 
         # return mi.Float(0.0001)
-        return self.eval_model(theta_in, 0., theta_out, phi_out_offset, mi.Float(600.), active)
+        # return (1. - self.passthrough_chance) * self.eval_model(theta_in, 0., theta_out, phi_out_offset, mi.Float(600.), active) * dr.dot(si.wi, si.n)
+        return (1. - self.passthrough_chance) * self.eval_model(theta_in, 0., theta_out, phi_out_offset, mi.Float(600.), active)
+
+    def pdf(self, ctx, si, wo, active):
+        return (1. - self.passthrough_chance)  / (4. * dr.pi)
+        
         # return self.eval_model(ctx,si,wo,active, 600., active)
         # return mi.Float(0.)
 
@@ -107,11 +112,15 @@ class BundleBSDF(mi.BSDF):
                 ']' % (self.passthrough_chance))
     
     def eval_model(self, theta_in: mi.Float, phi_in: mi.Float, theta_out: mi.Float, phi_out: mi.Float, wavelength: mi.Float, active) -> mi.Float:
-        t_i_coord, phi_i_coord, t_o_coord, phi_o_coord, wave_coord = self.get_model_coords(theta_in, phi_in, theta_out, phi_out, wavelength)
+        t_i_coord_lower, t_i_coord_upper, factor , phi_i_coord, t_o_coord, phi_o_coord, wave_coord = self.get_model_coords(theta_in, phi_in, theta_out, phi_out, wavelength)
         
-        index = self.coords_to_single_dim(t_i_coord, phi_i_coord, t_o_coord, phi_o_coord, wave_coord)
+        index_l = self.coords_to_single_dim(t_i_coord_lower, phi_i_coord, t_o_coord, phi_o_coord, wave_coord)
+        index_u = self.coords_to_single_dim(t_i_coord_upper, phi_i_coord, t_o_coord, phi_o_coord, wave_coord)
         
-        return dr.gather(mi.Float, self.model_tensor.array, index, active)
+        value_l = dr.gather(mi.Float, self.model_tensor.array, index_l, active)
+        value_u = dr.gather(mi.Float, self.model_tensor.array, index_u, active)
+
+        return dr.lerp(value_l, value_u, factor)
     
     def get_model_coords(self, theta_in: mi.Float, phi_in: mi.Float, theta_out: mi.Float, phi_out: mi.Float, wavelength: mi.Float) -> tuple[mi.UInt32, mi.UInt32, mi.UInt32, mi.UInt32, mi.UInt32]:
         shape_theta_i = mi.UInt32(self.model.shape[0])
@@ -121,7 +130,8 @@ class BundleBSDF(mi.BSDF):
         shape_wave = mi.UInt32(self.model.shape[4])
 
         # theta_i_coord = mi.UInt32((theta_in + dr.pi/2) / dr.pi * shape_theta_i)
-        theta_i_coord = mi.UInt32((theta_in ) / dr.pi * shape_theta_i)
+        theta_i_coord_lower = mi.UInt32(dr.floor((theta_in ) / dr.pi * shape_theta_i))
+        theta_i_coord_upper = mi.UInt32(dr.ceil((theta_in ) / dr.pi * shape_theta_i))
         phi_i_coord = mi.UInt32((phi_in) / (2*dr.pi) * shape_phi_i)
         # theta_o_coord = mi.UInt32((theta_out + dr.pi/2) / dr.pi * shape_theta_o)
         theta_o_coord = mi.UInt32((theta_out ) / dr.pi * shape_theta_o)
@@ -129,8 +139,9 @@ class BundleBSDF(mi.BSDF):
         wave_coord = mi.UInt32((wavelength - 400.) / 300. * shape_wave)
 
         # dr.printf_async("theta_i_coord: %s\n", theta_i_coord)
+        factor = (theta_in / dr.pi) * shape_theta_i - mi.Float(theta_i_coord_lower)
         
-        return theta_i_coord, phi_i_coord, theta_o_coord, phi_o_coord, wave_coord
+        return theta_i_coord_lower, theta_i_coord_upper, factor, phi_i_coord, theta_o_coord, phi_o_coord, wave_coord
 
     def coords_to_single_dim(self, theta_i: mi.UInt32, phi_i: mi.UInt32, theta_o: mi.UInt32, phi_o: mi.UInt32, wavelength: mi.UInt32) -> mi.UInt32:
         # use shapes in reverse order?

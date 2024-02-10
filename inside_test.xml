@@ -1,13 +1,13 @@
 <scene version='3.0.0'>
-    <default name="spp" value="200"/>
-    <default name="res" value="1024"/>
+    <default name="spp" value="100"/>
+    <default name="res" value="1000"/>
 
     <integrator type='bundle'/>
 
     <sensor type="perspective" id="sensor">
         <transform name="to_world">
             <lookat target="1.0, 1.0, 0.0"
-                    origin="0.0,-50.0, 20.0"
+                    origin="30.0,0.0, 20.0"
                     up    ="0.0, 0.0, 1.0"/>
         </transform>
         <sampler type="independent">
@@ -50,7 +50,7 @@
             <point name="tint" value="0.2, 0.25, 0.7"/>
         </bsdf>
 	</shape>
-    <!-- <shape type="cylinder">
+    <shape type="cylinder">
 		<point name="p0" value="15.0,  -50.0, 0.0"/>
 		<point name="p1" value="15.0,  50.0, 0.0"/>
         <float name="radius" value="5"/>
@@ -65,7 +65,7 @@
         <bsdf type="bundle_bsdf">
             <point name="tint" value="0.2, 0.25, 0.7"/>
         </bsdf>
-	</shape> -->
+	</shape>
     <!-- <shape type="linearcurve">
 		<string name="filename" value="inside_test_curve.txt"/>
         <bsdf type="bundle_bsdf">
