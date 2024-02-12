@@ -1,5 +1,5 @@
 <scene version='3.0.0'>
-    <default name="spp" value="100"/>
+    <default name="spp" value="500"/>
     <default name="res" value="1000"/>
 
     <integrator type='bundle'/>
@@ -22,7 +22,7 @@
     </sensor>
 
     <emitter type="envmap">
-        <string name="filename" value="near_the_river_01_4k.exr"/>
+        <string name="filename" value="grey_grass.exr"/>
         <transform name="to_world">
             <rotate value="1., 0., 0." angle="90"/>
         </transform>
@@ -47,15 +47,15 @@
 		<point name="p1" value="0.0,  50.0, 0.0"/>
         <float name="radius" value="5"/>
         <bsdf type="bundle_bsdf">
-            <point name="tint" value="0.2, 0.25, 0.7"/>
+            <float name="wavelength" value="WAVELENGTH"/>
         </bsdf>
 	</shape>
-    <shape type="cylinder">
+    <!-- <shape type="cylinder">
 		<point name="p0" value="15.0,  -50.0, 0.0"/>
 		<point name="p1" value="15.0,  50.0, 0.0"/>
         <float name="radius" value="5"/>
        <bsdf type="bundle_bsdf">
-            <point name="tint" value="0.2, 0.25, 0.7"/>
+            <float name="wavelength" value="WAVELENGTH"/>
         </bsdf>
 	</shape>
     <shape type="cylinder">
@@ -63,9 +63,9 @@
 		<point name="p1" value="-15.0,  50.0, 0.0"/>
         <float name="radius" value="5"/>
         <bsdf type="bundle_bsdf">
-            <point name="tint" value="0.2, 0.25, 0.7"/>
+            <float name="wavelength" value="WAVELENGTH"/>
         </bsdf>
-	</shape>
+	</shape> -->
     <!-- <shape type="linearcurve">
 		<string name="filename" value="inside_test_curve.txt"/>
         <bsdf type="bundle_bsdf">

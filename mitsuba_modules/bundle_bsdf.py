@@ -1,7 +1,7 @@
 from typing import Tuple
 import mitsuba as mi
 import drjit as dr
-mi.set_variant("llvm_ad_rgb")
+mi.set_variant("llvm_mono")
 
 from mitsuba import BSDF, BSDFContext, BSDFSample3f, Color3f, Point2f, SurfaceInteraction3f, Vector3f
 import numpy as np
@@ -20,7 +20,7 @@ class BundleBSDF(mi.BSDF):
         if props.has_property('eta'):
             self.eta = props['eta']
 
-        self.tint = props['tint']
+        self.wavelength = props['wavelength']
 
         # Set the BSDF flags
         reflection_flags   = mi.BSDFFlags.DeltaReflection   | mi.BSDFFlags.FrontSide | mi.BSDFFlags.BackSide
@@ -79,14 +79,14 @@ class BundleBSDF(mi.BSDF):
 
         # Calculate the offset in this case, since the input model is circular
         # Also apply twisting
-        phi_out_offset = (phi_out - phi_in) + dr.pi #+ si.uv.y * 20*dr.pi
+        phi_out_offset = (phi_out - phi_in) + dr.pi + si.uv.y * 10*dr.pi
         phi_out_offset[phi_out_offset < 0] += 2*dr.pi
         phi_out_offset[phi_out_offset > 2*dr.pi] -= 2*dr.pi
 
         # TODO: Check how wavelengths are handled 
         # return mi.Float(0.0001)
         # return (1. - self.passthrough_chance) * self.eval_model(theta_in, 0., theta_out, phi_out_offset, mi.Float(600.), active) * dr.dot(si.wi, si.n)
-        return (1. - self.passthrough_chance) * self.eval_model(theta_in, 0., theta_out, phi_out_offset, mi.Float(600.), active)
+        return (1. - self.passthrough_chance) * self.eval_model(theta_in, 0., theta_out, phi_out_offset, self.wavelength, active)
 
     def pdf(self, ctx, si, wo, active):
         return (1. - self.passthrough_chance)  / (4. * dr.pi)
@@ -101,7 +101,7 @@ class BundleBSDF(mi.BSDF):
         return super().eval_pdf_sample(ctx, si, wo, sample1, sample2, active)
 
     def traverse(self, callback):
-        callback.put_parameter('tint', self.tint, mi.ParamFlags.Differentiable)
+        callback.put_parameter('wavelength', self.wavelength, mi.ParamFlags.Differentiable)
 
     def parameters_changed(self, keys):
         print("🏝️ there is nothing to do here 🏝️")
@@ -189,10 +189,10 @@ def load_model(filepath) -> tuple[np.array, float]:
     # Wavelength: [0,24] steps of 1
 
     # Returns the model as a numpy array, as well as a float in [0,1], which is the chance of interaction
-    model = np.zeros((18,1,200,200,25))
+    model = np.zeros((37,1,200,200,25))
 
     # go through all the folders called theta-y-phi-0
-    folders = [f'theta-{x}-phi-0' for x in range(0,180,10)]
+    folders = [f'theta-{x}-phi-0' for x in range(0,180,5)]
     for (j,folder) in enumerate(folders):
         files = [f'lambda_{y}_intensities.npy' for y in range(25)]
         for (i,file) in enumerate(files):
